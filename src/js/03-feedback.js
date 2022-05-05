@@ -1,35 +1,33 @@
+//vars
 const throttle = require('lodash.throttle');
-const email = document.querySelector('input');
-const message = document.querySelector('textarea');
 const form = document.querySelector('.feedback-form');
-let formData = { email: '', message: '' };
+const localStorageKey = 'form-data';
+const storage = localStorage.getItem(localStorageKey);
+let formData = JSON.parse(storage) ?? {};
+
+//functions
+function onInput(e) {
+  formData[e.target.name] = e.target.value;
+  localStorage.setItem(localStorageKey, JSON.stringify(formData));
+}
+function onSubmit(e) {
+  e.preventDefault();
+  const formInputNames = Object.keys(e.currentTarget.elements).filter(item => isNaN(item));
+  if (!formInputNames.every(item => e.currentTarget.elements[item].value)) {
+    alert('Заполните все поля формы!!!');
+    return;
+  }
+  //required on task
+  console.log(formData);
+  localStorage.removeItem(localStorageKey);
+  e.currentTarget.reset();
+}
 
 //on form load
-if (localStorage.getItem('form-data')) {
-  formData = JSON.parse(localStorage.getItem('form-data'));
-  email.value = formData.email;
-  message.value = formData.message;
-}
+Object.keys(formData).forEach(item => {
+  form.elements[item].value = formData[item];
+});
 
 //add event listeners
 form.addEventListener('input', throttle(onInput, 500));
 form.addEventListener('submit', onSubmit);
-function onInput(e) {
-  if (e.target.name == 'email') {
-    formData.email = e.target.value;
-  } else formData.message = e.target.value;
-  localStorage.setItem('form-data', JSON.stringify(formData));
-}
-function onSubmit(e) {
-  e.preventDefault();
-  if (!(email.value && message.value)) {
-    alert('Заполните все поля формы!!!');
-    return;
-  }
-
-  console.log('email: ', email.value);
-  console.log('message: ', message.value);
-  localStorage.removeItem('form-data');
-  email.value = '';
-  message.value = '';
-}
