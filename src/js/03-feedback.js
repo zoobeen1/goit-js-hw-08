@@ -1,14 +1,14 @@
 //vars
 const throttle = require('lodash.throttle');
 const form = document.querySelector('.feedback-form');
-const localStorageKey = 'form-data';
-const storage = localStorage.getItem(localStorageKey);
+const LOCALSTORAGEKEY = 'form-data';
+const storage = localStorage.getItem(LOCALSTORAGEKEY);
 let formData = JSON.parse(storage) ?? {};
 
 //functions
 function onInput(e) {
   formData[e.target.name] = e.target.value;
-  localStorage.setItem(localStorageKey, JSON.stringify(formData));
+  localStorage.setItem(LOCALSTORAGEKEY, JSON.stringify(formData));
 }
 function onSubmit(e) {
   e.preventDefault();
@@ -19,7 +19,7 @@ function onSubmit(e) {
   }
   //required on task
   console.log(formData);
-  localStorage.removeItem(localStorageKey);
+  localStorage.removeItem(LOCALSTORAGEKEY);
   e.currentTarget.reset();
 }
 
