@@ -3,8 +3,8 @@ const throttle = require('lodash.throttle');
 const form = document.querySelector('.feedback-form');
 const LOCALSTORAGEKEY = 'form-data';
 const storage = localStorage.getItem(LOCALSTORAGEKEY);
-let formData = JSON.parse(storage) ?? {};
-// let formData = storage ? JSON.parse(storage) : {};
+// let formData = JSON.parse(storage) ?? {};
+let formData = storage ? JSON.parse(storage) : {};
 
 //functions
 function onInput(e) {
